@@ -1,0 +1,154 @@
+﻿@using FamilyReunion.Models
+<!-- ko with: home -->
+<div data-bind="visible: showMemberCreation" class="jumbotron">
+    <h1>Welcome!</h1>
+    <p class="lead">Lets get started, by registering you and joining a family!</p>
+    <form data-bind="with: member" class="form-horizontal" role="form">
+        <input type="hidden" id="MemberId" data-bind="value: memberId" />
+        <input type="hidden" id="Email" data-bind="value: email" />
+        <input type="hidden" id="IsEliigbleForWork" data-bind="value: isEligibleForWork" />
+
+        <div class="form-group">
+            <label for="Name" class="col-md-2 control-label">Name</label>
+            <div class="col-md-10">
+                <input id="Name" type="text" class="form-control" data-bind="value: name" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="DateOfBirth" class="col-md-2 control-label">Birth Day</label>
+            <div class="col-md-10">
+                <input id="DateOfBirth" type="date" class="form-control" data-bind="value: dateOfBirth" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="CellPhone" class="col-md-2 control-label">Cell Phone</label>
+            <div class="col-md-10">
+                <input id="CellPhone" type="text" class="form-control" data-bind="value: cellPhone" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="MemberTypeId" class="col-md-2 control-label">Role</label>
+            <div class="col-md-10">
+                <select id="MemberTypeId" class="form-control" data-bind="options: memberTypes,
+                            optionsText: 'name',
+                            optionsValue: 'memberTypeId',
+                            value: memberTypeId" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" data-bind="click: add" class="btn btn-default" value="Save" />
+            </div>
+        </div>
+    </form>
+</div>
+
+<div data-bind="visible: !showMemberCreation()" class="jumbotron">
+    <h1>Upcomming...</h1>
+    <p class="lead">Whats the plan?</p>
+    <button data-bind="click: createReunion">Add</button>
+    <div data-bind="visible: createReunionVisible">
+
+        <form data-bind="with: reunion" class="form-horizontal" role="form">
+            <h4>New Reunion</h4>
+            <hr />
+            <div class="form-group">
+                @Html.Label("Year", new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @{
+                        var years = Enumerable.Range(2017, 10)
+                          .Where(i => i > DateTime.Today.Year && (i - 2017 % 2 == 0))
+                          .Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() })
+                          .ToList();
+                    }
+
+                    @Html.DropDownList("Year", years, new { @class = "form-control" })
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Location", new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextArea("Location", new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="button" data-bind="click: add" class="btn btn-default" value="Register" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>When</th>
+                @*<th>Title</th>*@
+                @*<th>Description</th>*@
+                <th>Location</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: reunions">
+            <tr>
+                <td data-bind="text: Year"></td>
+                @*<td data-bind="text: Title"></td>*@
+                @*<td data-bind="text: Description"></td>*@
+                <td data-bind="text: Location"></td>
+                <td>
+                    @*<a class="btn btn-primary" href="#" data-bind="click: $parent.vote, visible: canVote">Vote!</a>*@
+                    @*<a class="btn btn-primary" href="#" data-bind="click: $parent.edit"><i class="glyphicon glyphicon-wrench"></i> Edit</a>
+                        <a class="btn btn-danger" href="#" data-bind="click: $parent.delete"><i class="glyphicon glyphicon-remove"></i> Delete</a>*@
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div data-bind="visible: !showMemberCreation()" class="row">
+    <div class="col-md-4">
+        <h2>Familes...</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>When</th>
+                    @*<th>Title</th>*@
+                    @*<th>Description</th>*@
+                    <th>Location</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: families">
+                <tr>
+                    <td data-bind="text: Year"></td>
+                    @*<td data-bind="text: Title"></td>*@
+                    @*<td data-bind="text: Description"></td>*@
+                    <td data-bind="text: Location"></td>
+                    <td>
+                        @*<a class="btn btn-primary" href="#" data-bind="click: $parent.vote, visible: canVote">Vote!</a>*@
+                        @*<a class="btn btn-primary" href="#" data-bind="click: $parent.edit"><i class="glyphicon glyphicon-wrench"></i> Edit</a>
+                        <a class="btn btn-danger" href="#" data-bind="click: $parent.delete"><i class="glyphicon glyphicon-remove"></i> Delete</a>*@
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </div>
+
+    <div class="col-md-4">
+        <h2>Getting started</h2>
+        <p>
+            ASP.NET Single Page Application (SPA) helps you build applications that include significant client-side interactions using HTML, CSS, and JavaScript.
+            It's now easier than ever before to getting started writing highly interactive web applications.
+        </p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=273732">Learn more &raquo;</a></p>
+    </div>
+
+    <div class="col-md-4">
+        <h2>Web Hosting</h2>
+        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    </div>
+</div>
+<!-- /ko -->
