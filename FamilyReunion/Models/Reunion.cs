@@ -7,6 +7,7 @@ namespace FamilyReunion.Models
         public Reunion()
         {
             Teams = new List<Team>();
+            ReunionMembers = new List<ReunionMember>();
         }
         public int ReunionId { get; set; }
         public int Year { get; set; }
@@ -15,5 +16,6 @@ namespace FamilyReunion.Models
         public string Location { get; set; }
 
         public ICollection<Team> Teams { get; set; }
+        public ICollection<ReunionMember> ReunionMembers { get; set; }
     }
 }

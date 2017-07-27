@@ -11,29 +11,32 @@
     self.memberTypes = ko.observableArray([]);
 
     common.api(app.dataModel.MemberTypes, function (data) {
+        self.memberTypes([]);
         $.each(data, function (key, value) {
             self.memberTypes.push(value);
         });
     });
 
     self.add = function () {
-        var data = ko.toJS(this);
-        delete data.memberId;
-        delete data.memberTypes;
+        var item = ko.toJS(this);
+        delete item.memberId;
+        delete item.memberTypes;
 
-        common.apiAdd(app.dataModel.Members, data, function () {
+        common.apiAdd(app.dataModel.Members, item, function () {
             app.Views["Home"].showMemberCreation(false);
         });
     };
     self.edit = function () {
-        var data = ko.toJS(this);
-        delete data.memberTypes;
+        var item = ko.toJS(this);
+        delete item.memberTypes;
 
-        common.apiUpdate(app.dataModel.Members, self.memberId(), data, function () {
+        common.apiUpdate(app.dataModel.Members, item.memberId, item, function () {
         });
     };
     self.delete = function () {
-        common.apiDelete(app.dataModel.Members, self.memberId(), function () {
+        var item = ko.toJS(this);
+
+        common.apiDelete(app.dataModel.Members, item.memberId, function () {
         });
     };
     return self;

@@ -10,7 +10,7 @@ namespace FamilyReunion.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             ContextKey = "FamilyReunion.Models.ApplicationDbContext";
         }
 
@@ -30,6 +30,7 @@ namespace FamilyReunion.Migrations
             //
             context.MemberTypes.AddOrUpdate(
               p => p.Name,
+              new MemberType { Name = "Me" },
               new MemberType { Name = "Mom" },
               new MemberType { Name = "Dad" },
               new MemberType { Name = "Son" },

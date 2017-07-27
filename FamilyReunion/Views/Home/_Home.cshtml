@@ -44,72 +44,46 @@
 </div>
 
 <div data-bind="visible: !showMemberCreation()" class="jumbotron">
+    <input type="hidden" id="MemberId" name="MemberId" data-bind="value: me.member.memberId" />
     <h1>Upcomming...</h1>
     <p class="lead">Whats the plan?</p>
-    <button data-bind="click: createReunion">Add</button>
-    <div data-bind="visible: createReunionVisible">
-
-        <form data-bind="with: reunion" class="form-horizontal" role="form">
+    <button data-bind="click: reunion.createReunion">Add</button>
+    <div data-bind="visible: reunion.createReunionVisible">
+        <form id="reunionForm" data-bind="with: reunion" class="form-horizontal" role="form">
             <h4>New Reunion</h4>
             <hr />
             <div class="form-group">
-                @Html.Label("Year", new { @class = "col-md-2 control-label" })
+                <label class="col-md-2 control-label" for="Year">Year</label>
                 <div class="col-md-10">
                     @{
-                        var years = Enumerable.Range(2017, 10)
-                          .Where(i => i > DateTime.Today.Year && (i - 2017 % 2 == 0))
-                          .Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() })
+                        var years = Enumerable.Range(2017, 20)
+                          .Where(i => i > DateTime.Today.Year && ((i - 2017) % 2 == 0))
                           .ToList();
                     }
-
-                    @Html.DropDownList("Year", years, new { @class = "form-control" })
+                    <select class="form-control" data-bind="value: year" id="Year" name="Year">
+                        @foreach (var year in years)
+                        {
+                            <option value="@year">@year</option>
+                        }
+                    </select>
                 </div>
 
             </div>
 
             <div class="form-group">
-                @Html.Label("Location", new { @class = "col-md-2 control-label" })
+                <label class="col-md-2 control-label" for="Location">Location</label>
                 <div class="col-md-10">
-                    @Html.TextArea("Location", new { @class = "form-control" })
+                    <textarea data-bind="value: location" class="form-control" cols="20" id="Location" name="Location" rows="2"></textarea>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="button" data-bind="click: add" class="btn btn-default" value="Register" />
+                    <input type="button" data-bind="click: add" class="btn btn-default" value="Save" />
                 </div>
             </div>
         </form>
     </div>
-    <table>
-        <thead>
-            <tr>
-                <th>When</th>
-                @*<th>Title</th>*@
-                @*<th>Description</th>*@
-                <th>Location</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: reunions">
-            <tr>
-                <td data-bind="text: Year"></td>
-                @*<td data-bind="text: Title"></td>*@
-                @*<td data-bind="text: Description"></td>*@
-                <td data-bind="text: Location"></td>
-                <td>
-                    @*<a class="btn btn-primary" href="#" data-bind="click: $parent.vote, visible: canVote">Vote!</a>*@
-                    @*<a class="btn btn-primary" href="#" data-bind="click: $parent.edit"><i class="glyphicon glyphicon-wrench"></i> Edit</a>
-                        <a class="btn btn-danger" href="#" data-bind="click: $parent.delete"><i class="glyphicon glyphicon-remove"></i> Delete</a>*@
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<div data-bind="visible: !showMemberCreation()" class="row">
-    <div class="col-md-4">
-        <h2>Familes...</h2>
-         
-        test
+    <div data-bind="with: reunion">
         <table>
             <thead>
                 <tr>
@@ -120,36 +94,68 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody data-bind="foreach: families">
+            <tbody data-bind="foreach: reunions">
                 <tr>
-                    <td data-bind="text: Year"></td>
+                    <td data-bind="text: year"></td>
                     @*<td data-bind="text: Title"></td>*@
                     @*<td data-bind="text: Description"></td>*@
-                    <td data-bind="text: Location"></td>
+                    <td data-bind="text: location"></td>
                     <td>
+
                         @*<a class="btn btn-primary" href="#" data-bind="click: $parent.vote, visible: canVote">Vote!</a>*@
-                        @*<a class="btn btn-primary" href="#" data-bind="click: $parent.edit"><i class="glyphicon glyphicon-wrench"></i> Edit</a>
-                        <a class="btn btn-danger" href="#" data-bind="click: $parent.delete"><i class="glyphicon glyphicon-remove"></i> Delete</a>*@
+                        <a class="btn btn-primary" href="#" data-bind="click: $parent.detail"><i class="glyphicon glyphicon-info-sign"></i> Details</a>
+                        <a class="btn btn-primary" href="#" data-bind="click: $parent.edit"><i class="glyphicon glyphicon-wrench"></i> Edit</a>
+                        <a class="btn btn-danger" href="#" data-bind="click: $parent.delete"><i class="glyphicon glyphicon-remove"></i> Delete</a>
                     </td>
                 </tr>
             </tbody>
         </table>
-        
     </div>
+</div>
+<div data-bind="visible: !showMemberCreation()" class="row">
+    <div class="col-md-12">
+        <h2>Familes...</h2>
 
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET Single Page Application (SPA) helps you build applications that include significant client-side interactions using HTML, CSS, and JavaScript.
-            It's now easier than ever before to getting started writing highly interactive web applications.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=273732">Learn more &raquo;</a></p>
-    </div>
-
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+        <button data-bind="click: family.createFamily">Add</button>
+        <div data-bind="visible: family.createFamilyVisible">
+            <form id="familyForm" data-bind="with: family" class="form-horizontal" role="form">
+                <h4>New Family</h4>
+                <hr />
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="Name">Name</label>
+                    <div class="col-md-10">
+                        <input type="text" data-bind="value: name" class="form-control" id="Name" name="Name" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="button" data-bind="click: add" class="btn btn-default" value="Save" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div data-bind="with: family">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Family</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: families">
+                    <tr>
+                        <td data-bind="text: name"></td>
+                        @*<td data-bind="text: Title"></td>*@
+                        @*<td data-bind="text: Description"></td>*@
+                        <td>
+                            <a class="btn btn-primary" href="#" data-bind="click: $parent.join, visible: $parent.canJoin">Join!</a>
+                            <a class="btn btn-primary" href="#" data-bind="click: $parent.edit">Edit</a>
+                            <a class="btn btn-danger" href="#" data-bind="click: $parent.delete">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <!-- /ko -->

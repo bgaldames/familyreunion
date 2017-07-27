@@ -6,29 +6,14 @@ function HomeViewModel(app, dataModel) {
     self.email = ko.observable("");
     self.showMemberCreation = ko.observable("");
     self.me = ko.observable("");
-    self.famlies = ko.observableArray([]);
-    self.reunions = ko.observableArray([]);
+
     self.member = new MemberViewModel(app, dataModel);
     self.reunion = new ReunionViewModel(app, dataModel);
     self.family = new FamilyViewModel(app, dataModel);
-    self.createReunionVisible = ko.observable(false);
 
-    self.createReunion = function () {
-        self.createReunionVisible(!self.createReunionVisible());
-    };
-    
     function loadDetails() {
-        common.api(app.dataModel.Families, function (data) {
-            $.each(data, function (key, value) {
-                self.families.push(value);
-            });
-        });
-        common.api(app.dataModel.Reunions, function (data) {
-            self.reunions = data;
-            $.each(data, function (key, value) {
-                self.reunions.push(value);
-            });
-        });
+        self.family.init();
+        self.reunion.init();
     }
 
     Sammy(function () {
@@ -40,6 +25,7 @@ function HomeViewModel(app, dataModel) {
                 self.showMemberCreation(data.member == null);
 
                 if (data.member != null) {
+                    self.family.canJoin(data.member.familyMemberships.length == 0);
                     loadDetails();
                 } else {
                     self.member.email(data.email);
