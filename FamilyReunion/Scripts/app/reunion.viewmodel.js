@@ -1,6 +1,8 @@
 ﻿function ReunionViewModel(app, dataModel) {
     var self = this;
 
+    var familyVacationCalendarId = 'tt59slhpv2nl6k8dch36u9cpj0@group.calendar.google.com';
+
     self.reunionId = ko.observable("");
     self.year = ko.observable("");
     self.title = ko.observable("");
@@ -31,7 +33,7 @@
             self.setTeams(reunion.teams);
             self.calendarUrl("https://calendar.google.com/calendar/embed?"
                 + "showTitle=0&showNav=0&showDate=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0"
-                + "&src=lu43a474aso5ooev7h9cspl77c%40group.calendar.google.com&src=qh7a8qlu8kcmiqu8t7i3hdq3kk%40group.calendar.google.com"
+                + "&src=" + familyVacationCalendarId
                 + "&wkst=1&mode=WEEK"
                 + "&dates=" + moment(reunion.startDate).format("YYYYMMDD") + "/" + moment(reunion.endDate).format("YYYYMMDD"));
         }
@@ -126,8 +128,7 @@
     };
     self.createEvent = function () {
         // https://developers.google.com/google-apps/calendar/create-events
-        var clientId = '989682649564-s1f9t9j1ovl3nq0i5lulj6kq4tk7lrib.apps.googleusercontent.com';
-
+   
         var event = {
             'summary': 'Bayrons BdAY',
             'location': 'Florida',
@@ -150,7 +151,7 @@
         };
 
         var request = gapi.client.calendar.events.insert({
-            'calendarId': calendarId,
+            'calendarId': familyVacationCalendarId,
             'resource': event
         });
 

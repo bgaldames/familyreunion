@@ -38,48 +38,15 @@
         function initClient() {
             gapi.client.init({
                 discoveryDocs: DISCOVERY_DOCS,
+                apiKey: 'AIzaSyAXTVhiJUk_VjFxLWvSvPJfbAPrU5da2iU',
                 clientId: CLIENT_ID,
                 scope: SCOPES
             }).then(function () {
-                // Listen for sign-in state changes.
-                gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-
-                // Handle the initial sign-in state.
-                updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-                authorizeButton.onclick = handleAuthClick;
-                signoutButton.onclick = handleSignoutClick;
+                listUpcomingEvents()
             });
         }
 
-        /**
-         *  Called when the signed in status changes, to update the UI
-         *  appropriately. After a sign-in, the API is called.
-         */
-        function updateSigninStatus(isSignedIn) {
-            if (isSignedIn) {
-                authorizeButton.style.display = 'none';
-                signoutButton.style.display = 'block';
-                listUpcomingEvents();
-            } else {
-                authorizeButton.style.display = 'block';
-                signoutButton.style.display = 'none';
-            }
-        }
-
-        /**
-         *  Sign in the user upon button click.
-         */
-        function handleAuthClick(event) {
-            gapi.auth2.getAuthInstance().signIn();
-        }
-
-        /**
-         *  Sign out the user upon button click.
-         */
-        function handleSignoutClick(event) {
-            gapi.auth2.getAuthInstance().signOut();
-        }
-
+    
         /**
          * Append a pre element to the body containing the given message
          * as its text node. Used to display the results of the API call.
@@ -99,12 +66,13 @@
          */
         function listUpcomingEvents() {
             gapi.client.calendar.events.list({
-                'calendarId': 'primary',
-                'timeMin': (new Date()).toISOString(),
-                'showDeleted': false,
-                'singleEvents': true,
-                'maxResults': 10,
-                'orderBy': 'startTime'
+                'calendarId': 'tt59slhpv2nl6k8dch36u9cpj0@group.calendar.google.com' //'qh7a8qlu8kcmiqu8t7i3hdq3kk@group.calendar.google.com',
+                //'timeMin': (new Date()).toISOString(),
+                //'timeMax': (new Date()).toISOString(),
+                //'showDeleted': false,
+                //'singleEvents': true,
+                //'maxResults': 10,
+                //'orderBy': 'startTime', 
             }).then(function (response) {
                 var events = response.result.items;
                 appendPre('Upcoming events:');
