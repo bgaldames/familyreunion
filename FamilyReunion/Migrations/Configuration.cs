@@ -1,16 +1,14 @@
 namespace FamilyReunion.Migrations
 {
-    using Models;
-    using System;
-    using System.Data.Entity;
+    using FamilyReunion.Models;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
     internal sealed class Configuration : DbMigrationsConfiguration<FamilyReunion.Models.ApplicationDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
             ContextKey = "FamilyReunion.Models.ApplicationDbContext";
         }
 
@@ -29,14 +27,14 @@ namespace FamilyReunion.Migrations
             //    );
             //
             context.MemberTypes.AddOrUpdate(
-              p => p.Name,
-              new MemberType { Name = "Me" },
-              new MemberType { Name = "Mom" },
-              new MemberType { Name = "Dad" },
-              new MemberType { Name = "Son" },
-              new MemberType { Name = "Daughter" },
-              new MemberType { Name = "Grand Ma" }
-            );
+             p => p.Name,
+             new MemberType { Name = "Me" },
+             new MemberType { Name = "Mom" },
+             new MemberType { Name = "Dad" },
+             new MemberType { Name = "Son" },
+             new MemberType { Name = "Daughter" },
+             new MemberType { Name = "Grand Ma" }
+           );
             context.DutyTypes.AddOrUpdate(
               p => p.Name,
               new DutyType { Name = "Cook" },

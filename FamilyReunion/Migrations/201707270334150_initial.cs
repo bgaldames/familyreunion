@@ -3,7 +3,7 @@ namespace FamilyReunion.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialCreate : DbMigration
+    public partial class initial : DbMigration
     {
         public override void Up()
         {
@@ -53,6 +53,7 @@ namespace FamilyReunion.Migrations
                         Email = c.String(),
                         CellPhone = c.String(),
                         DateOfBirth = c.DateTime(nullable: false),
+                        IsEligibleForWork = c.Boolean(nullable: false),
                         Team_TeamId = c.Int(),
                     })
                 .PrimaryKey(t => t.MemberId)
@@ -84,6 +85,22 @@ namespace FamilyReunion.Migrations
                 .PrimaryKey(t => t.MemberTypeId);
             
             CreateTable(
+                "dbo.ReunionMembers",
+                c => new
+                    {
+                        ReunionMemberId = c.Int(nullable: false, identity: true),
+                        MemberId = c.Int(nullable: false),
+                        ReunionId = c.Int(nullable: false),
+                        IsAttending = c.Boolean(nullable: false),
+                        Reason = c.String(),
+                    })
+                .PrimaryKey(t => t.ReunionMemberId)
+                .ForeignKey("dbo.Members", t => t.MemberId, cascadeDelete: true)
+                .ForeignKey("dbo.Reunions", t => t.ReunionId, cascadeDelete: true)
+                .Index(t => t.MemberId)
+                .Index(t => t.ReunionId);
+            
+            CreateTable(
                 "dbo.Families",
                 c => new
                     {
@@ -102,6 +119,7 @@ namespace FamilyReunion.Migrations
                         Title = c.String(),
                         Description = c.String(),
                         Location = c.String(),
+                        GoogleFormId = c.String(),
                     })
                 .PrimaryKey(t => t.ReunionId);
             
@@ -133,7 +151,6 @@ namespace FamilyReunion.Migrations
                 c => new
                     {
                         Id = c.String(nullable: false, maxLength: 128),
-                        Hometown = c.String(),
                         Email = c.String(maxLength: 256),
                         EmailConfirmed = c.Boolean(nullable: false),
                         PasswordHash = c.String(),
@@ -183,7 +200,9 @@ namespace FamilyReunion.Migrations
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
             DropForeignKey("dbo.Teams", "ReunionId", "dbo.Reunions");
+            DropForeignKey("dbo.ReunionMembers", "ReunionId", "dbo.Reunions");
             DropForeignKey("dbo.Members", "Team_TeamId", "dbo.Teams");
+            DropForeignKey("dbo.ReunionMembers", "MemberId", "dbo.Members");
             DropForeignKey("dbo.Members", "MemberTypeId", "dbo.MemberTypes");
             DropForeignKey("dbo.FamilyMembers", "MemberId", "dbo.Members");
             DropForeignKey("dbo.Duties", "Team_TeamId", "dbo.Teams");
@@ -194,6 +213,8 @@ namespace FamilyReunion.Migrations
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
+            DropIndex("dbo.ReunionMembers", new[] { "ReunionId" });
+            DropIndex("dbo.ReunionMembers", new[] { "MemberId" });
             DropIndex("dbo.FamilyMembers", new[] { "MemberId" });
             DropIndex("dbo.Members", new[] { "Team_TeamId" });
             DropIndex("dbo.Members", new[] { "MemberTypeId" });
@@ -207,6 +228,7 @@ namespace FamilyReunion.Migrations
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.Reunions");
             DropTable("dbo.Families");
+            DropTable("dbo.ReunionMembers");
             DropTable("dbo.MemberTypes");
             DropTable("dbo.FamilyMembers");
             DropTable("dbo.Members");

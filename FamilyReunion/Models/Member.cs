@@ -8,7 +8,8 @@ namespace FamilyReunion.Models
     {
         public Member()
         {
-            FamilyMemberships = new List<FamilyMember>();
+            Families = new List<FamilyMember>();
+            Reunions = new List<ReunionMember>();
         }
         public int MemberId { get; set; }
         public int MemberTypeId { get; set; }
@@ -21,6 +22,7 @@ namespace FamilyReunion.Models
         public bool IsEligibleForWork { get; set; }
 
         public virtual MemberType MemberType { get; set; }
-        public virtual ICollection<FamilyMember> FamilyMemberships { get; set; }
+        public virtual ICollection<FamilyMember> Families { get; set; }
+        public virtual ICollection<ReunionMember> Reunions { get; set; }
     }
 }

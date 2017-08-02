@@ -44,7 +44,6 @@
 </div>
 
 <div data-bind="visible: !showMemberCreation()" class="jumbotron">
-    <input type="hidden" id="MemberId" name="MemberId" data-bind="value: me.member.memberId" />
     <h1>Upcomming...</h1>
     <p class="lead">Whats the plan?</p>
     <button data-bind="click: reunion.createReunion">Add</button>
@@ -63,17 +62,27 @@
                     <select class="form-control" data-bind="value: year" id="Year" name="Year">
                         @foreach (var year in years)
                         {
-                            <option value="@year">@year</option>
+                        <option value="@year">@year</option>
                         }
                     </select>
                 </div>
-
             </div>
-
             <div class="form-group">
                 <label class="col-md-2 control-label" for="Location">Location</label>
                 <div class="col-md-10">
                     <textarea data-bind="value: location" class="form-control" cols="20" id="Location" name="Location" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="Location">Start Date</label>
+                <div class="col-md-10">
+                    <input type="date" data-bind="value: startDate" class="form-control" id="StartDate" name="StartDate" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="Location">End Date</label>
+                <div class="col-md-10">
+                    <input type="date" data-bind="value: endDate" class="form-control" id="EndDate" name="EndDate" />
                 </div>
             </div>
             <div class="form-group">
@@ -103,9 +112,15 @@
                     <td>
 
                         @*<a class="btn btn-primary" href="#" data-bind="click: $parent.vote, visible: canVote">Vote!</a>*@
-                        <a class="btn btn-primary" href="#" data-bind="click: $parent.detail"><i class="glyphicon glyphicon-info-sign"></i> Details</a>
-                        <a class="btn btn-primary" href="#" data-bind="click: $parent.edit"><i class="glyphicon glyphicon-wrench"></i> Edit</a>
-                        <a class="btn btn-danger" href="#" data-bind="click: $parent.delete"><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                        <a class="btn btn-primary" href="#" data-bind="click: $parent.detail($data)"><i class="glyphicon glyphicon-info-sign"></i> Details</a>
+                        <!-- ko if: $parent.hasReunion($data.reunionId) -->
+                        <a class="btn btn-primary" href="#" data-bind="click: $parent.leave">Skip</a>
+                        <!-- /ko -->
+                        <!-- ko if: !$parent.hasReunion($data.reunionId) -->
+                        <a class="btn btn-primary" href="#" data-bind="click: $parent.join">Attend!</a>
+                        <!-- /ko -->
+                        <a class="btn btn-primary" href="#" data-bind="click: $parent.edit">Edit</a>
+                        <a class="btn btn-danger" href="#" data-bind="click: $parent.delete">Delete</a>
                     </td>
                 </tr>
             </tbody>
@@ -113,9 +128,36 @@
     </div>
 </div>
 <div data-bind="visible: !showMemberCreation()" class="row">
+    <!-- ko if: !family.canJoin() -->
+    <div class="col-md-12">
+        <h6>Family: <label data-bind="text: family.name"></label></h6>
+        <h2><label data-bind="text: reunion.location"></label> <label data-bind="text: reunion.year"></label></h2>
+    </div>
+    <div class="col-md-4">
+        <h4>Teams: <button type="button" class="btn btn-primary" data-bind="click: reunion.assignTeams">Assign Teams</button></h4>
+        <div data-bind="foreach: reunion.teams">
+            <ul>
+                <li data-bind="foreach: members">
+                    <label data-bind="text: name"></label>
+                    @*<!-- ko if: $parent.hasLead($parent.teamId) -->
+                        <a class="btn btn-primary" href="#" data-bind="click: $parent.leave, visible: !$parent.canJoin()">Leave</a>
+                        <!-- /ko -->
+                        <!-- ko if: !$parent.hasLead($parent.teamId) -->
+                        <a class="btn btn-primary" href="#" data-bind="click: $parent.join, visible: $parent.canJoin">Join!</a>
+                        <!-- /ko -->*@
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <h4>Schedule: <button type="button" class="btn btn-primary" data-bind="click: reunion.createEvent"><i class="glyphicon glyphicon-plus"></i> Event</button></h4>
+        <iframe data-bind="attr: { src: reunion.calendarUrl }" style="border:solid 1px #777" width="800" height="400" frameborder="0" scrolling="no"></iframe>
+       
+    </div>
+    <!-- /ko -->
+    <!-- ko if: family.canJoin -->
     <div class="col-md-12">
         <h2>Familes...</h2>
-
         <button data-bind="click: family.createFamily">Add</button>
         <div data-bind="visible: family.createFamilyVisible">
             <form id="familyForm" data-bind="with: family" class="form-horizontal" role="form">
@@ -148,7 +190,12 @@
                         @*<td data-bind="text: Title"></td>*@
                         @*<td data-bind="text: Description"></td>*@
                         <td>
+                            <!-- ko if: $parent.hasFamily($data.familyId) -->
+                            <a class="btn btn-primary" href="#" data-bind="click: $parent.leave, visible: !$parent.canJoin()">Leave</a>
+                            <!-- /ko -->
+                            <!-- ko if: !$parent.hasFamily($data.familyId) -->
                             <a class="btn btn-primary" href="#" data-bind="click: $parent.join, visible: $parent.canJoin">Join!</a>
+                            <!-- /ko -->
                             <a class="btn btn-primary" href="#" data-bind="click: $parent.edit">Edit</a>
                             <a class="btn btn-danger" href="#" data-bind="click: $parent.delete">Delete</a>
                         </td>
@@ -157,5 +204,6 @@
             </table>
         </div>
     </div>
+    <!-- /ko -->
 </div>
 <!-- /ko -->

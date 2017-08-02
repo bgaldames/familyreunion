@@ -6,5 +6,8 @@
         public int FamilyId { get; set; }
         public int MemberId { get; set; }
         public bool IsPrimary { get; set; }
+
+        public virtual Family Family { get; set; }
+        public virtual Member Member { get; set; }
     }
 }

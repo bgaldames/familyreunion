@@ -231,29 +231,14 @@
     <Compile Include="Controllers\MeController.cs" />
     <Compile Include="Controllers\MembersController.cs" />
     <Compile Include="Controllers\MemberTypesController.cs" />
+    <Compile Include="Controllers\ReunionMembersController.cs" />
     <Compile Include="Controllers\ReunionsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201707222223337_InitialCreate.cs" />
-    <Compile Include="Migrations\201707222223337_InitialCreate.Designer.cs">
-      <DependentUpon>201707222223337_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707231335469_2.cs" />
-    <Compile Include="Migrations\201707231335469_2.Designer.cs">
-      <DependentUpon>201707231335469_2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707231340387_Seed Data.cs" />
-    <Compile Include="Migrations\201707231340387_Seed Data.Designer.cs">
-      <DependentUpon>201707231340387_Seed Data.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707260217270_test.cs" />
-    <Compile Include="Migrations\201707260217270_test.Designer.cs">
-      <DependentUpon>201707260217270_test.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707270132167_ReunionMembers.cs" />
-    <Compile Include="Migrations\201707270132167_ReunionMembers.Designer.cs">
-      <DependentUpon>201707270132167_ReunionMembers.cs</DependentUpon>
+    <Compile Include="Migrations\201707270334150_initial.cs" />
+    <Compile Include="Migrations\201707270334150_initial.Designer.cs">
+      <DependentUpon>201707270334150_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -359,6 +344,7 @@
     <Content Include="Scripts\knockout.validation.js" />
     <Content Include="Scripts\knockout.validation.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
@@ -420,20 +406,8 @@
     <Content Include="Scripts\jquery-3.1.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201707222223337_InitialCreate.resx">
-      <DependentUpon>201707222223337_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707231335469_2.resx">
-      <DependentUpon>201707231335469_2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707231340387_Seed Data.resx">
-      <DependentUpon>201707231340387_Seed Data.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707260217270_test.resx">
-      <DependentUpon>201707260217270_test.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707270132167_ReunionMembers.resx">
-      <DependentUpon>201707270132167_ReunionMembers.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201707270334150_initial.resx">
+      <DependentUpon>201707270334150_initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

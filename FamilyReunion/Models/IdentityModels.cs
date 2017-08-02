@@ -40,5 +40,6 @@ namespace FamilyReunion.Models
         public DbSet<Duty> Duties { get; set; }
         public DbSet<DutyType> DutyTypes { get; set; }
 
+        public System.Data.Entity.DbSet<FamilyReunion.Models.ReunionMember> ReunionMembers { get; set; }
     }
 }

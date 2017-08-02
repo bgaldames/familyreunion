@@ -10,12 +10,14 @@
     self.isEligibleForWork = ko.observable(isEligibleForWork || true);
     self.memberTypes = ko.observableArray([]);
 
-    common.api(app.dataModel.MemberTypes, function (data) {
-        self.memberTypes([]);
-        $.each(data, function (key, value) {
-            self.memberTypes.push(value);
+    self.init = function () {
+        common.api(app.dataModel.MemberTypes, function (data) {
+            self.memberTypes([]);
+            $.each(data, function (key, value) {
+                self.memberTypes.push(value);
+            });
         });
-    });
+    };
 
     self.add = function () {
         var item = ko.toJS(this);

@@ -8,6 +8,13 @@
     self.createFamilyVisible = ko.observable(false);
     self.canJoin = ko.observable(false);
 
+    self.set = function (family) {
+        if (family) {
+            self.familyId(family.familyId);
+            self.name(family.name);
+            self.createDate(family.createDate);
+        }
+    };
     self.init = function () {
         common.api(app.dataModel.Families, function (data) {
             self.families([]);
@@ -53,10 +60,32 @@
     };
     self.join = function () {
         var item = ko.toJS(this);
-
-        common.apiAdd(app.dataModel.FamilyMembers, { familyId: item.familyId, memberId: '' }, function () {
-            
+        var familyId = item.familyId;
+        var memberId = app.Views["Home"].me().memberId;;
+        common.apiAdd(app.dataModel.FamilyMembers, { familyId: familyId, memberId: memberId }, function () {
+            app.Views["Home"].init();
         });
+    };
+    self.leave = function () {
+        var item = ko.toJS(this);
+        var familyId = item.familyId;
+        $.each(app.Views["Home"].me().families, function (key, value) {
+            if (value.familyId != familyId)
+                return;
+            common.apiDelete(app.dataModel.FamilyMembers, value.familyMemberId, function () {
+                app.Views["Home"].init();
+            });
+        });
+    };
+    self.hasFamily = function (familyId) {
+        var result = false;
+        $.each(app.Views["Home"].me().families, function (key, value) {
+            if (value.familyId == familyId) {
+                result = true;
+                return;
+            }
+        });
+        return result;
     };
     return self;
 }

@@ -6,6 +6,9 @@
     self.Reunions = "/api/Reunions";
     self.Families = "/api/Families";
     self.MemberTypes = "/api/MemberTypes";
+    self.FamilyMembers = '/api/FamilyMembers';
+    self.ReunionMembers = '/api/ReunionMembers';
+    self.AssignTeams = self.Reunions + '/AssignTeams';
     self.siteUrl = "/";
 
     // Route operations

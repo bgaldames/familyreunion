@@ -40,10 +40,22 @@ namespace FamilyReunion.Controllers
             var user = UserManager.FindById(User.Identity.GetUserId());
             var email = User.Identity.Name;
             var member = db.Members.FirstOrDefault(m => m.Email == email);
-            return new GetViewModel()
+            return new GetViewModel
             {
                 Email = email,
-                Member = member
+                Member = member,
+                Family = member != null
+                ? member.Families
+                    .OrderBy(f => f.IsPrimary)
+                    .Select(f => f.Family)
+                    .FirstOrDefault()
+                : null,
+                Reunion = member != null
+                ? member.Reunions
+                    .OrderBy(f => f.Reunion.Year)
+                    .Select(f => f.Reunion)
+                    .FirstOrDefault()
+                : null
             };
         }
     }

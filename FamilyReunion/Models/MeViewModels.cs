@@ -6,5 +6,7 @@
         public string Hometown { get; set; }
         public string Email { get; set; }
         public Member Member { get; set; }
+        public Family Family { get; internal set; }
+        public Reunion Reunion { get; internal set; }
     }
 }
