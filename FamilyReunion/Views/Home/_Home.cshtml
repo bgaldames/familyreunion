@@ -26,74 +26,83 @@
                 <input id="CellPhone" type="text" class="form-control" data-bind="value: cellPhone" />
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" data-bind="visible: memberId() != ''">
             <label for="MemberTypeId" class="col-md-2 control-label">Role</label>
             <div class="col-md-10">
                 <select id="MemberTypeId" class="form-control" data-bind="options: memberTypes,
                             optionsText: 'name',
                             optionsValue: 'memberTypeId',
-                            value: memberTypeId" />
+                            value: memberTypeId"></select>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="button" data-bind="click: add" class="btn btn-default" value="Save" />
+                <input type="button" data-bind="click: add" class="btn btn-primary" value="Save" />
             </div>
         </div>
     </form>
 </div>
 
 <div data-bind="visible: !showMemberCreation()" class="jumbotron">
-    <h1>Upcomming...</h1>
-    <p class="lead">Whats the plan?</p>
-    <button data-bind="click: reunion.createReunion">Add</button>
-    <div data-bind="visible: reunion.createReunionVisible">
-        <form id="reunionForm" data-bind="with: reunion" class="form-horizontal" role="form">
-            <h4>New Reunion</h4>
-            <hr />
-            <div class="form-group">
-                <label class="col-md-2 control-label" for="Year">Year</label>
-                <div class="col-md-10">
-                    @{
-                        var years = Enumerable.Range(2017, 20)
-                          .Where(i => i > DateTime.Today.Year && ((i - 2017) % 2 == 0))
-                          .ToList();
-                    }
-                    <select class="form-control" data-bind="value: year" id="Year" name="Year">
-                        @foreach (var year in years)
-                        {
-                        <option value="@year">@year</option>
-                        }
-                    </select>
+    <h2>Upcomming Events</h2>
+    <button class="btn btn-default" data-toggle="modal" data-target="#reunionModal">
+        <i class="glyphicon glyphicon-plus"></i> Add
+    </button>
+    <div class="modal fade" id="reunionModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">New Reunion</h4>
                 </div>
+                <form id="reunionForm" data-bind="with: reunion" class="form-horizontal" role="form">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="Year">Year</label>
+                            <div class="col-md-10">
+                                @{
+                                    var years = Enumerable.Range(2017, 20)
+                                      .Where(i => i > DateTime.Today.Year && ((i - 2017) % 2 == 0))
+                                      .ToList();
+                                }
+                                <select class="form-control" data-bind="value: year" id="Year" name="Year">
+                                    <option value="">Select Year</option>
+                                    @foreach (var year in years)
+                                    {
+                                        <option value="@year">@year</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="Location">Location</label>
+                            <div class="col-md-10">
+                                <textarea data-bind="value: location" class="form-control" cols="20" id="Location" name="Location" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="Location">Start Date</label>
+                            <div class="col-md-10">
+                                <input type="date" data-bind="value: startDate" class="form-control" id="StartDate" name="StartDate" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="Location">End Date</label>
+                            <div class="col-md-10">
+                                <input type="date" data-bind="value: endDate" class="form-control" id="EndDate" name="EndDate" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <input type="button" data-bind="click: add" class="btn btn-primary" value="Save" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label" for="Location">Location</label>
-                <div class="col-md-10">
-                    <textarea data-bind="value: location" class="form-control" cols="20" id="Location" name="Location" rows="2"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label" for="Location">Start Date</label>
-                <div class="col-md-10">
-                    <input type="date" data-bind="value: startDate" class="form-control" id="StartDate" name="StartDate" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label" for="Location">End Date</label>
-                <div class="col-md-10">
-                    <input type="date" data-bind="value: endDate" class="form-control" id="EndDate" name="EndDate" />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="button" data-bind="click: add" class="btn btn-default" value="Save" />
-                </div>
-            </div>
-        </form>
+        </div>
     </div>
     <div data-bind="with: reunion">
-        <table>
+        <table class="table table-responsive table-condensed">
             <thead>
                 <tr>
                     <th>When</th>
@@ -130,35 +139,190 @@
 <div data-bind="visible: !showMemberCreation()" class="row">
     <!-- ko if: !family.canJoin() -->
     <div class="col-md-12">
-        <h6>Family: <label data-bind="text: family.name"></label></h6>
-        <h2><label data-bind="text: reunion.location"></label> <label data-bind="text: reunion.year"></label></h2>
-    </div>
-    <div class="col-md-4">
-        <h4>Teams: <button type="button" class="btn btn-primary" data-bind="click: reunion.assignTeams">Assign Teams</button></h4>
-        <div data-bind="foreach: reunion.teams">
-            <ul>
-                <li data-bind="foreach: members">
-                    <label data-bind="text: name"></label>
-                    @*<!-- ko if: $parent.hasLead($parent.teamId) -->
-                        <a class="btn btn-primary" href="#" data-bind="click: $parent.leave, visible: !$parent.canJoin()">Leave</a>
-                        <!-- /ko -->
-                        <!-- ko if: !$parent.hasLead($parent.teamId) -->
-                        <a class="btn btn-primary" href="#" data-bind="click: $parent.join, visible: $parent.canJoin">Join!</a>
-                        <!-- /ko -->*@
-                </li>
-            </ul>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h5>
+                    <span>&quot;<label data-bind="text: family.name"></label>&quot; Family</span>
+                    <button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#memberModal"><i class="glyphicon glyphicon-plus"></i></button>
+                </h5>
+                <div class="modal fade" id="memberModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">New Member</h4>
+                            </div>
+                            <form id="memberForm" data-bind="with: newMember" class="form-horizontal" role="form">
+                                <div class="modal-body">
+                                    <input type="hidden" name="MemberId" data-bind="value: memberId" />
+                                    <input type="hidden" name="MemberTypeId" data-bind="value: memberTypeId" />
+                                    <input type="hidden" name="IsEliigbleForWork" data-bind="value: isEligibleForWork" />
+
+                                    <div class="form-group">
+                                        <label for="Name" class="col-md-2 control-label">Name</label>
+                                        <div class="col-md-10">
+                                            <input id="Name" type="text" class="form-control" data-bind="value: name" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="DateOfBirth" class="col-md-2 control-label">Birth Day</label>
+                                        <div class="col-md-10">
+                                            <input id="DateOfBirth" type="date" class="form-control" data-bind="value: dateOfBirth" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Email" class="col-md-2 control-label">Email</label>
+                                        <div class="col-md-10">
+                                            <input id="Email" type="email" class="form-control" data-bind="value: email" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="CellPhone" class="col-md-2 control-label">Cell Phone</label>
+                                        <div class="col-md-10">
+                                            <input id="CellPhone" type="text" class="form-control" data-bind="value: cellPhone" />
+                                        </div>
+                                    </div>
+                                    @*<div class="form-group" data-bind="visible: memberId() != ''">
+                                            <label for="MemberTypeId" class="col-md-2 control-label">Role</label>
+                                            <div class="col-md-10">
+                                                <select id="MemberTypeId" class="form-control" data-bind="options: memberTypes,
+                                        optionsText: 'name',
+                                        optionsValue: 'memberTypeId',
+                                        value: memberTypeId"></select>
+                                            </div>
+                                        </div>*@
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <input type="button" data-bind="click: addToFamily" class="btn btn-primary" value="Save" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <ul class="list-group list-group-justified" data-bind="foreach: family.members">
+                    <li class="list-group-item">
+                        <label data-bind="text: member.name"></label>
+                        <div class="pull-right">
+                            <a class="btn btn-default" href="#" data-bind="click: member.edit"><i class="glyphicon glyphicon-pencil"></i></a>
+                            <a class="btn btn-default" href="#" data-bind="click: member.delete"><i class="glyphicon glyphicon-remove"></i></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel-footer">
+            </div>
         </div>
     </div>
     <div class="col-md-12">
-        <h4>Schedule: <button type="button" class="btn btn-primary" data-bind="click: reunion.createEvent"><i class="glyphicon glyphicon-plus"></i> Event</button></h4>
-        <iframe data-bind="attr: { src: reunion.calendarUrl }" style="border:solid 1px #777" width="800" height="400" frameborder="0" scrolling="no"></iframe>
-       
+        <h2><label data-bind="text: reunion.location"></label> <label data-bind="text: reunion.year"></label></h2>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4>Teams: <button type="button" class="btn btn-primary" data-bind="click: reunion.assignTeams">Assign Teams</button></h4>
+            </div>
+            <div class="panel-body">
+                <div data-bind="foreach: reunion.teams">
+                    <ul>
+                        <li data-bind="foreach: members">
+                            <label data-bind="text: name"></label>
+                            @*<!-- ko if: $parent.hasLead($parent.teamId) -->
+                                <a class="btn btn-primary" href="#" data-bind="click: $parent.leave, visible: !$parent.canJoin()">Leave</a>
+                                <!-- /ko -->
+                                <!-- ko if: !$parent.hasLead($parent.teamId) -->
+                                <a class="btn btn-primary" href="#" data-bind="click: $parent.join, visible: $parent.canJoin">Join!</a>
+                                <!-- /ko -->*@
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-footer">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4>
+                    Schedule: <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#eventModal">
+                        <i class="glyphicon glyphicon-plus"></i> Event
+                    </button>
+                </h4>
+            </div>
+            <div class="panel-body">
+                <div class="modal fade" id="eventModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">New Event</h4>
+                            </div>
+                            <form id="eventForm" data-bind="with: event" class="form-horizontal" role="form">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <div class="alert alert-info">
+                                                <p>Default Reminders:</p>
+                                                <ul>
+                                                    <li>Email 2 hours before event</li>
+                                                    <li>Popup 10 minutes before event</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label" for="Summary">Title</label>
+                                        <div class="col-md-10">
+                                            <input placeholder="Event Title" type="text" data-bind="value: summary" class="form-control" id="Summary" name="Summary" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label" for="Location">Location</label>
+                                        <div class="col-md-10">
+                                            <input placeholder="Event Location" type="text" data-bind="value: location" class="form-control" id="Location" name="Location" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label" for="Description">Description</label>
+                                        <div class="col-md-10">
+                                            <input placeholder="Event Description" type="text" data-bind="value: description" class="form-control" id="Description" name="Description" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label" for="Start">Start Date</label>
+                                        <div class="col-md-10">
+                                            <input placeholder="mm/dd/yyyy" type="datetime" class="form-control" data-bind="value: start" id="Start" name="Start">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label" for="Hours">Duration in hours</label>
+                                        <div class="col-md-10">
+                                            <input placeholder="1 hour" type="number" step="1" min="1" max="10" class="form-control" data-bind="value: hours" id="Hours" name="Hours">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <input type="button" data-bind="click: add" class="btn btn-primary" value="Save" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <iframe id="calendarFrame" data-bind="attr: { src: reunion.calendarUrl }" style="border:solid 1px #777; width: 100%;" width="800" height="400" frameborder="0" scrolling="no"></iframe>
+            </div>
+            <div class="panel-footer">
+            </div>
+        </div>
     </div>
     <!-- /ko -->
     <!-- ko if: family.canJoin -->
     <div class="col-md-12">
         <h2>Familes...</h2>
-        <button data-bind="click: family.createFamily">Add</button>
+        <button class="btn btn-default" data-bind="click: family.createFamily"><i class="glyphicon glyphicon-plus"></i> Add</button>
         <div data-bind="visible: family.createFamilyVisible">
             <form id="familyForm" data-bind="with: family" class="form-horizontal" role="form">
                 <h4>New Family</h4>
@@ -171,13 +335,13 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="button" data-bind="click: add" class="btn btn-default" value="Save" />
+                        <input type="button" data-bind="click: add" class="btn btn-primary" value="Save" />
                     </div>
                 </div>
             </form>
         </div>
         <div data-bind="with: family">
-            <table>
+            <table class="table table-responsive table-condensed">
                 <thead>
                     <tr>
                         <th>Family</th>

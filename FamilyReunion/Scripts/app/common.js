@@ -1,6 +1,6 @@
 ﻿
 window.common = (function () {
-    var common = {};
+    let common = {};
 
     common.getFragment = function getFragment() {
         if (window.location.hash.indexOf("#") === 0) {
@@ -11,7 +11,7 @@ window.common = (function () {
     };
 
     function parseQueryString(queryString) {
-        var data = {},
+        let data = {},
             pairs, pair, separatorIndex, escapedKey, escapedValue, key, value;
 
         if (queryString === null) {
@@ -41,7 +41,7 @@ window.common = (function () {
         return data;
     }
 
-    common.api = function (url, successFunc) {
+    common.api = function (url, successFunc, errorFunc) {
         $.ajax({
             method: 'get',
             url: url,
@@ -49,7 +49,8 @@ window.common = (function () {
             headers: {
                 'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
             },
-            success: successFunc
+            success: successFunc,
+            error: errorFunc || common.errorFunc
         });
     };
 
@@ -60,7 +61,7 @@ window.common = (function () {
         return data;
     }
 
-    common.apiAdd = function (url, data, successFunc) {
+    common.apiAdd = function (url, data, successFunc, errorFunc) {
         data = validate(data);
         $.ajax({
             method: 'post',
@@ -70,11 +71,12 @@ window.common = (function () {
                 'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
             },
             data: data,
-            success: successFunc
+            success: successFunc,
+            error: errorFunc || common.errorFunc
         });
     };
 
-    common.apiEdit = function (url, id, data, successFunc) {
+    common.apiEdit = function (url, id, data, successFunc, errorFunc) {
         data = validate(data)
         $.ajax({
             method: 'put',
@@ -84,11 +86,12 @@ window.common = (function () {
                 'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
             },
             data: data,
-            success: successFunc
+            success: successFunc,
+            error: errorFunc || common.errorFunc
         });
     };
 
-    common.apiDelete = function (url, id, successFunc) {
+    common.apiDelete = function (url, id, successFunc, errorFunc) {
         $.ajax({
             method: 'delete',
             url: url + '/' + id,
@@ -96,8 +99,28 @@ window.common = (function () {
             headers: {
                 'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
             },
-            success: successFunc
+            success: successFunc,
+            error: errorFunc
         });
+    };
+
+    common.errorFunc = function (response) {
+        if (typeof (response.responseJSON) == "object") {
+            let data = response.responseJSON;
+            if (data.message) {
+                if (data.modelState) {
+                    var message = '';
+                    $.each(data.modelState, function (index, item) {
+                        for (var property in item) {
+                            message += item[property] + '\n';
+                        }
+                    });
+                    alert(message);
+                } else {
+                    alert(data.message);
+                }
+            }
+        }
     };
 
     return common;

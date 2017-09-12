@@ -1,8 +1,6 @@
 ﻿function ReunionViewModel(app, dataModel) {
     var self = this;
 
-    var familyVacationCalendarId = 'tt59slhpv2nl6k8dch36u9cpj0@group.calendar.google.com';
-
     self.reunionId = ko.observable("");
     self.year = ko.observable("");
     self.title = ko.observable("");
@@ -33,7 +31,7 @@
             self.setTeams(reunion.teams);
             self.calendarUrl("https://calendar.google.com/calendar/embed?"
                 + "showTitle=0&showNav=0&showDate=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0"
-                + "&src=" + familyVacationCalendarId
+                + "&src=" + dataModel.familyVacationCalendarId
                 + "&wkst=1&mode=WEEK"
                 + "&dates=" + moment(reunion.startDate).format("YYYYMMDD") + "/" + moment(reunion.endDate).format("YYYYMMDD"));
         }
@@ -67,6 +65,7 @@
             self.init();
             $('#reunionForm')[0].reset();
             self.createReunionVisible(false);
+            $('#reunionModal').modal('hide');
         });
     };
     self.edit = function () {
@@ -78,6 +77,7 @@
 
         common.apiUpdate(app.dataModel.Reunions, item.reunionId, item, function () {
             self.init();
+            $('#reunionModal').modal('hide');
         });
     };
     self.delete = function () {
@@ -126,38 +126,5 @@
             app.Views["Home"].init();
         });
     };
-    self.createEvent = function () {
-        // https://developers.google.com/google-apps/calendar/create-events
-   
-        var event = {
-            'summary': 'Bayrons BdAY',
-            'location': 'Florida',
-            'description': 'YEAAAAAAAAAAAAAAAAAAAH',
-            'start': {
-                'dateTime': '2017-08-8T09:00:00-07:00',
-                'timeZone': 'America/Los_Angeles'
-            },
-            'end': {
-                'dateTime': '2017-08-17T17:00:00-07:00',
-                'timeZone': 'America/Los_Angeles'
-            },
-            'reminders': {
-                'useDefault': false,
-                'overrides': [
-                    { 'method': 'email', 'minutes': 2 * 60 },
-                    { 'method': 'popup', 'minutes': 10 }
-                ]
-            }
-        };
-
-        var request = gapi.client.calendar.events.insert({
-            'calendarId': familyVacationCalendarId,
-            'resource': event
-        });
-
-        request.execute(function (event) {
-            appendPre('Event created: ' + event.htmlLink);
-        });
-    }
     return self;
 }

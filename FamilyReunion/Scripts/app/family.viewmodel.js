@@ -5,6 +5,7 @@
     self.name = ko.observable(name || "");
     self.createDate = ko.observable(createDate || "");
     self.families = ko.observableArray([]);
+    self.members = ko.observableArray([]);
     self.createFamilyVisible = ko.observable(false);
     self.canJoin = ko.observable(false);
 
@@ -13,7 +14,14 @@
             self.familyId(family.familyId);
             self.name(family.name);
             self.createDate(family.createDate);
+            self.setMembers(family.familyMembers);
         }
+    };
+    self.setMembers = function (members) {
+        self.members([]);
+        $.each(members, function (key, value) {
+            self.members.push(value);
+        });
     };
     self.init = function () {
         common.api(app.dataModel.Families, function (data) {
@@ -33,6 +41,7 @@
         delete item.canJoin;
         delete item.families;
         delete item.createFamilyVisible;
+        delete item.members;
 
         common.apiAdd(app.dataModel.Families, item, function () {
             self.init();
@@ -46,6 +55,7 @@
         delete item.families;
         delete item.canJoin;
         delete item.createFamilyVisible
+        delete item.members;
 
         common.apiUpdate(app.dataModel.Families, item.familyId, item, function () {
             self.init();
@@ -58,12 +68,15 @@
             self.init();
         });
     };
-    self.join = function () {
+    self.join = function (existingMemberId, successFunc) {
         var item = ko.toJS(this);
         var familyId = item.familyId;
-        var memberId = app.Views["Home"].me().memberId;;
-        common.apiAdd(app.dataModel.FamilyMembers, { familyId: familyId, memberId: memberId }, function () {
+        var memberId = existingMemberId || app.Views["Home"].me().memberId;
+        common.apiAdd(app.dataModel.FamilyMembers, { familyId: familyId, memberId: memberId }, function (data) {
             app.Views["Home"].init();
+            if (typeof (successFunc) == "function") {
+                successFunc(data);
+            }
         });
     };
     self.leave = function () {

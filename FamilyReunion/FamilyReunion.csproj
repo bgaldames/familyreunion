@@ -236,9 +236,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201707270334150_initial.cs" />
-    <Compile Include="Migrations\201707270334150_initial.Designer.cs">
-      <DependentUpon>201707270334150_initial.cs</DependentUpon>
+    <Compile Include="Migrations\201708131647152_Initial.cs" />
+    <Compile Include="Migrations\201708131647152_Initial.Designer.cs">
+      <DependentUpon>201708131647152_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -330,6 +330,7 @@
     <Content Include="Content\google\vector\btn_google_light_normal_ios.eps" />
     <Content Include="Content\google\vector\btn_google_light_pressed_ios.eps" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="Scripts\app\event.viewmodel.js" />
     <Content Include="Scripts\app\family.viewmodel.js" />
     <Content Include="Scripts\app\member.viewmodel.js" />
     <Content Include="Scripts\app\reunion.viewmodel.js" />
@@ -406,8 +407,8 @@
     <Content Include="Scripts\jquery-3.1.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201707270334150_initial.resx">
-      <DependentUpon>201707270334150_initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201708131647152_Initial.resx">
+      <DependentUpon>201708131647152_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

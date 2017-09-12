@@ -24,6 +24,7 @@ namespace FamilyReunion
                 "~/Scripts/app/common.js",
                 "~/Scripts/app/app.datamodel.js",
                 "~/Scripts/app/app.viewmodel.js",
+                "~/Scripts/app/event.viewmodel.js",
                 "~/Scripts/app/family.viewmodel.js",
                 "~/Scripts/app/member.viewmodel.js",
                 "~/Scripts/app/reunion.viewmodel.js",

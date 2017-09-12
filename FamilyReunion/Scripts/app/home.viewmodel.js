@@ -8,8 +8,10 @@ function HomeViewModel(app, dataModel) {
     self.me = ko.observable("");
 
     self.member = new MemberViewModel(app, dataModel);
+    self.newMember = new MemberViewModel(app, dataModel);
     self.reunion = new ReunionViewModel(app, dataModel);
     self.family = new FamilyViewModel(app, dataModel);
+    self.event = new EventViewModel(app, dataModel);
 
     function setFamily(family) {
         self.family.set(family);
@@ -36,6 +38,7 @@ function HomeViewModel(app, dataModel) {
                 loadDetails();
                 setFamily(data.family);
                 setReunion(data.reunion);
+                self.newMember.init();
             } else {
                 self.member.email(data.email);
                 self.member.init();

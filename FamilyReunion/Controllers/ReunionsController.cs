@@ -43,6 +43,11 @@ namespace FamilyReunion.Controllers
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutReunion(int id, Reunion reunion)
         {
+            if(db.Reunions.Any(r => r.Year == reunion.Year))
+            {
+                ModelState.AddModelError("Year", "Year is already taken.");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -78,6 +83,11 @@ namespace FamilyReunion.Controllers
         [ResponseType(typeof(Reunion))]
         public async Task<IHttpActionResult> PostReunion(Reunion reunion)
         {
+            if (db.Reunions.Any(r => r.Year == reunion.Year))
+            {
+                ModelState.AddModelError("Year", "Year is already taken.");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

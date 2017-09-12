@@ -11,6 +11,8 @@
     self.AssignTeams = self.Reunions + '/AssignTeams';
     self.siteUrl = "/";
 
+    self.familyVacationCalendarId = 'tt59slhpv2nl6k8dch36u9cpj0@group.calendar.google.com';
+
     // Route operations
 
     // Other private operations

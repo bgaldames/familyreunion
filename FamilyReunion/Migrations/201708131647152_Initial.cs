@@ -3,7 +3,7 @@ namespace FamilyReunion.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class initial : DbMigration
+    public partial class Initial : DbMigration
     {
         public override void Up()
         {
@@ -72,8 +72,20 @@ namespace FamilyReunion.Migrations
                         IsPrimary = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.FamilyMemberId)
+                .ForeignKey("dbo.Families", t => t.FamilyId, cascadeDelete: true)
                 .ForeignKey("dbo.Members", t => t.MemberId, cascadeDelete: true)
+                .Index(t => t.FamilyId)
                 .Index(t => t.MemberId);
+            
+            CreateTable(
+                "dbo.Families",
+                c => new
+                    {
+                        FamilyId = c.Int(nullable: false, identity: true),
+                        Name = c.String(),
+                        CreateDate = c.DateTime(),
+                    })
+                .PrimaryKey(t => t.FamilyId);
             
             CreateTable(
                 "dbo.MemberTypes",
@@ -101,16 +113,6 @@ namespace FamilyReunion.Migrations
                 .Index(t => t.ReunionId);
             
             CreateTable(
-                "dbo.Families",
-                c => new
-                    {
-                        FamilyId = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                        CreateDate = c.DateTime(),
-                    })
-                .PrimaryKey(t => t.FamilyId);
-            
-            CreateTable(
                 "dbo.Reunions",
                 c => new
                     {
@@ -120,6 +122,8 @@ namespace FamilyReunion.Migrations
                         Description = c.String(),
                         Location = c.String(),
                         GoogleFormId = c.String(),
+                        StartDate = c.DateTime(),
+                        EndDate = c.DateTime(),
                     })
                 .PrimaryKey(t => t.ReunionId);
             
@@ -199,12 +203,13 @@ namespace FamilyReunion.Migrations
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
+            DropForeignKey("dbo.Members", "Team_TeamId", "dbo.Teams");
             DropForeignKey("dbo.Teams", "ReunionId", "dbo.Reunions");
             DropForeignKey("dbo.ReunionMembers", "ReunionId", "dbo.Reunions");
-            DropForeignKey("dbo.Members", "Team_TeamId", "dbo.Teams");
             DropForeignKey("dbo.ReunionMembers", "MemberId", "dbo.Members");
             DropForeignKey("dbo.Members", "MemberTypeId", "dbo.MemberTypes");
             DropForeignKey("dbo.FamilyMembers", "MemberId", "dbo.Members");
+            DropForeignKey("dbo.FamilyMembers", "FamilyId", "dbo.Families");
             DropForeignKey("dbo.Duties", "Team_TeamId", "dbo.Teams");
             DropForeignKey("dbo.Duties", "DutyTypeId", "dbo.DutyTypes");
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
@@ -216,6 +221,7 @@ namespace FamilyReunion.Migrations
             DropIndex("dbo.ReunionMembers", new[] { "ReunionId" });
             DropIndex("dbo.ReunionMembers", new[] { "MemberId" });
             DropIndex("dbo.FamilyMembers", new[] { "MemberId" });
+            DropIndex("dbo.FamilyMembers", new[] { "FamilyId" });
             DropIndex("dbo.Members", new[] { "Team_TeamId" });
             DropIndex("dbo.Members", new[] { "MemberTypeId" });
             DropIndex("dbo.Teams", new[] { "ReunionId" });
@@ -227,9 +233,9 @@ namespace FamilyReunion.Migrations
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.Reunions");
-            DropTable("dbo.Families");
             DropTable("dbo.ReunionMembers");
             DropTable("dbo.MemberTypes");
+            DropTable("dbo.Families");
             DropTable("dbo.FamilyMembers");
             DropTable("dbo.Members");
             DropTable("dbo.Teams");

@@ -9,7 +9,7 @@
     <button id="authorize-button" style="display: none;">Authorize</button>
     <button id="signout-button" style="display: none;">Sign Out</button>
 
-<pre id="content"></pre>
+    <pre id="content" style="display: none;"></pre>
     <script type="text/javascript">
         // Client ID and API key from the Developer Console
         var CLIENT_ID = '989682649564-s1f9t9j1ovl3nq0i5lulj6kq4tk7lrib.apps.googleusercontent.com';
@@ -46,7 +46,7 @@
             });
         }
 
-    
+
         /**
          * Append a pre element to the body containing the given message
          * as its text node. Used to display the results of the API call.
@@ -72,7 +72,7 @@
                 //'showDeleted': false,
                 //'singleEvents': true,
                 //'maxResults': 10,
-                //'orderBy': 'startTime', 
+                //'orderBy': 'startTime',
             }).then(function (response) {
                 var events = response.result.items;
                 appendPre('Upcoming events:');

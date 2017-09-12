@@ -1,4 +1,5 @@
 ﻿using FamilyReunion.Models;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -15,9 +16,12 @@ namespace FamilyReunion.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/Families
-        public IQueryable<Family> GetFamilies()
+        public List<Family> GetFamilies()
         {
-            return db.Families;
+            return db.Families
+                .Include(f => f.FamilyMembers)
+                .Include("FamilyMembers.Member")
+                .ToList();
         }
 
         // GET: api/Families/5
